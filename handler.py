@@ -126,8 +126,12 @@ def load_model():
     
     model.eval()
     
-    # Initialize SNAC decoder
-    snac_decoder = SNAC()
+    # Initialize SNAC decoder (load from pretrained model)
+    print("Loading SNAC decoder...")
+    snac_decoder = SNAC.from_pretrained("hubertsiuzdak/snac_24khz").eval()
+    if device == 'cuda' and torch.cuda.is_available():
+        snac_decoder = snac_decoder.to('cuda')
+    print("SNAC decoder loaded")
     
     print("Model loaded successfully")
     return model, tokenizer
@@ -239,18 +243,25 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     # Unpack SNAC tokens
     l1, l2, l3 = unpack_snac_from_7(snac_codes)
     
-    # Decode SNAC to audio
-    # SNAC.decode() expects a single argument - a tuple containing (l1, l2, l3)
-    # Convert to PyTorch tensors on CPU (SNAC decoder likely expects CPU tensors)
-    l1_tensor = torch.tensor(l1, dtype=torch.long, device='cpu')
-    l2_tensor = torch.tensor(l2, dtype=torch.long, device='cpu')
-    l3_tensor = torch.tensor(l3, dtype=torch.long, device='cpu')
-    # Pass as a single tuple argument
-    hierarchical_codes = (l1_tensor, l2_tensor, l3_tensor)
-    audio_array = snac_decoder.decode(hierarchical_codes)
-    # Convert audio to numpy array if needed
-    if isinstance(audio_array, torch.Tensor):
-        audio_array = audio_array.cpu().numpy()
+    # Decode SNAC to audio using the correct API
+    # Convert to PyTorch tensors with batch dimension
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    codes_tensor = [
+        torch.tensor(level, dtype=torch.long, device=device).unsqueeze(0)
+        for level in [l1, l2, l3]
+    ]
+    
+    # Decode through SNAC quantizer + decoder (correct API)
+    with torch.no_grad():
+        z_q = snac_decoder.quantizer.from_codes(codes_tensor)
+        audio_tensor = snac_decoder.decoder(z_q)
+        # Extract audio: [batch, 1, samples] → [samples]
+        audio_array = audio_tensor[0, 0].cpu().numpy()
+    
+    # Trim warmup samples (first 2048 samples) for cleaner audio
+    if len(audio_array) > 2048:
+        audio_array = audio_array[2048:]
+    
     sampling_rate = 24000  # Maya1 uses 24kHz
     
     return audio_array, sampling_rate
