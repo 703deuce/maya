@@ -241,13 +241,17 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     
     # Decode SNAC to audio
     # SNAC.decode() expects a single argument - a tuple containing (l1, l2, l3)
-    # Convert to numpy arrays for compatibility
-    l1_array = np.array(l1, dtype=np.int32)
-    l2_array = np.array(l2, dtype=np.int32)
-    l3_array = np.array(l3, dtype=np.int32)
+    # Convert to PyTorch tensors (SNAC decoder expects tensors, not numpy arrays)
+    device = next(model.parameters()).device
+    l1_tensor = torch.tensor(l1, dtype=torch.long, device=device)
+    l2_tensor = torch.tensor(l2, dtype=torch.long, device=device)
+    l3_tensor = torch.tensor(l3, dtype=torch.long, device=device)
     # Pass as a single tuple argument
-    hierarchical_codes = (l1_array, l2_array, l3_array)
+    hierarchical_codes = (l1_tensor, l2_tensor, l3_tensor)
     audio_array = snac_decoder.decode(hierarchical_codes)
+    # Convert audio to numpy array if needed
+    if isinstance(audio_array, torch.Tensor):
+        audio_array = audio_array.cpu().numpy()
     sampling_rate = 24000  # Maya1 uses 24kHz
     
     return audio_array, sampling_rate
