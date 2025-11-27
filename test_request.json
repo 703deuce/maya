@@ -1,0 +1,11 @@
+{
+  "input": {
+    "text": "Hello, this is a test of the Maya1 TTS system. <laugh> This is working great!",
+    "voice_description": "Female, in her 30s with an American accent, energetic, clear diction",
+    "temperature": 0.7,
+    "max_new_tokens": 1000,
+    "upload_to_firebase": false,
+    "firebase_user_id": "test_user_123"
+  }
+}
+
