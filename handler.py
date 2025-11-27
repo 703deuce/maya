@@ -138,22 +138,38 @@ def load_model():
 
 
 def build_prompt(description: str, text: str) -> str:
-    """Build formatted prompt for Maya1."""
-    soh_token = tokenizer.decode([SOH_ID])
-    eoh_token = tokenizer.decode([EOH_ID])
-    soa_token = tokenizer.decode([SOA_ID])
-    sos_token = tokenizer.decode([CODE_START_TOKEN_ID])
-    eot_token = tokenizer.decode([TEXT_EOT_ID])
-    bos_token = tokenizer.bos_token if tokenizer.bos_token else tokenizer.decode([BOS_ID])
+    """
+    Build formatted prompt for Maya1.
     
+    Uses chat template if available (matches official examples),
+    otherwise falls back to manual token construction.
+    """
     formatted_text = f'<description="{description}"> {text}'
     
-    prompt = (
-        soh_token + bos_token + formatted_text + eot_token +
-        eoh_token + soa_token + sos_token
-    )
-    
-    return prompt
+    # Try using chat template (official method)
+    try:
+        messages = [{"role": "user", "content": formatted_text}]
+        prompt = tokenizer.apply_chat_template(
+            messages, 
+            tokenize=False, 
+            add_generation_prompt=True
+        )
+        return prompt
+    except (AttributeError, KeyError, TypeError):
+        # Fallback to manual construction if chat template not available
+        soh_token = tokenizer.decode([SOH_ID])
+        eoh_token = tokenizer.decode([EOH_ID])
+        soa_token = tokenizer.decode([SOA_ID])
+        sos_token = tokenizer.decode([CODE_START_TOKEN_ID])
+        eot_token = tokenizer.decode([TEXT_EOT_ID])
+        bos_token = tokenizer.bos_token if tokenizer.bos_token else tokenizer.decode([BOS_ID])
+        
+        prompt = (
+            soh_token + bos_token + formatted_text + eot_token +
+            eoh_token + soa_token + sos_token
+        )
+        
+        return prompt
 
 
 def extract_snac_codes(token_ids: list) -> list:
@@ -221,18 +237,23 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     device = next(model.parameters()).device
     input_ids = input_ids.to(device)
     
-    # Generate tokens
+    # Generate tokens with parameters matching official Maya1 examples
     with torch.no_grad():
         outputs = model.generate(
             input_ids,
             max_new_tokens=max_new_tokens,
+            min_new_tokens=28,  # At least 4 SNAC frames (7 tokens each)
             temperature=temperature,
+            top_p=0.9,  # Nucleus sampling
+            repetition_penalty=1.1,  # Prevent repetition loops
             do_sample=True,
-            pad_token_id=tokenizer.eos_token_id,
+            eos_token_id=CODE_END_TOKEN_ID,  # Stop at end of speech token
+            pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id else tokenizer.eos_token_id,
         )
     
     # Extract generated tokens (remove input tokens)
-    generated_tokens = outputs[0][input_ids.shape[1]:].cpu().tolist()
+    generated_ids = outputs[0, input_ids.shape[1]:].cpu().tolist()
+    generated_tokens = generated_ids
     
     # Extract SNAC codes
     snac_codes = extract_snac_codes(generated_tokens)
