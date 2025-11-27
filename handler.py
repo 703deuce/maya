@@ -240,7 +240,8 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     l1, l2, l3 = unpack_snac_from_7(snac_codes)
     
     # Decode SNAC to audio
-    audio_array = snac_decoder.decode(l1, l2, l3)
+    # SNAC.decode() expects a single tuple/list argument containing (l1, l2, l3)
+    audio_array = snac_decoder.decode((l1, l2, l3))
     sampling_rate = 24000  # Maya1 uses 24kHz
     
     return audio_array, sampling_rate
