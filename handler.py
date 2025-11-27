@@ -200,11 +200,31 @@ def extract_snac_codes(token_ids: list) -> list:
 
 
 def unpack_snac_from_7(snac_tokens: list) -> tuple:
-    """Unpack 7-token SNAC frames to 3 hierarchical levels."""
+    """
+    Unpack 7-token SNAC frames to 3 hierarchical levels.
+    
+    Handles partial frames gracefully - if the last frame is incomplete,
+    we include as much as we can rather than truncating everything.
+    """
     if snac_tokens and snac_tokens[-1] == CODE_END_TOKEN_ID:
         snac_tokens = snac_tokens[:-1]
     
+    # Calculate complete frames, but don't truncate if we have partial frame
+    # This ensures we use all generated SNAC tokens, even if the last frame is incomplete
     frames = len(snac_tokens) // SNAC_TOKENS_PER_FRAME
+    remaining = len(snac_tokens) % SNAC_TOKENS_PER_FRAME
+    
+    if remaining > 0:
+        print(f"WARNING: {remaining} extra SNAC tokens after {frames} complete frames - may indicate incomplete generation")
+        # Include partial frame if it has at least 3 tokens (minimal useful data)
+        if remaining >= 3:
+            print(f"INFO: Including partial frame with {remaining} tokens")
+            frames += 1
+            # Pad to complete frame length with zeros (or repeat last token)
+            padding_needed = SNAC_TOKENS_PER_FRAME - remaining
+            snac_tokens = snac_tokens + [snac_tokens[-1]] * padding_needed
+    
+    # Now truncate to exact frame boundaries
     snac_tokens = snac_tokens[:frames * SNAC_TOKENS_PER_FRAME]
     
     if frames == 0:
@@ -214,6 +234,11 @@ def unpack_snac_from_7(snac_tokens: list) -> tuple:
     
     for i in range(frames):
         slots = snac_tokens[i*7:(i+1)*7]
+        # Ensure we have exactly 7 slots
+        if len(slots) < 7:
+            print(f"WARNING: Frame {i} has only {len(slots)} slots, padding...")
+            slots = slots + [slots[-1] if slots else CODE_TOKEN_OFFSET] * (7 - len(slots))
+        
         l1.append((slots[0] - CODE_TOKEN_OFFSET) % 4096)
         l2.extend([
             (slots[1] - CODE_TOKEN_OFFSET) % 4096,
@@ -242,15 +267,17 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
         load_model()
     
     # Calculate max_new_tokens based on text length if not explicitly set
-    # Use formula: base (500) + multiplier (4 * word_count) with cap
+    # Use formula: base (500) + multiplier (8-10 * word_count) with cap
+    # More generous multiplier to ensure complete generation (each word may need 8-10 tokens)
     # This matches best practices from maya1-fastapi and vllm_streaming_inference
     if max_new_tokens == 2000:  # Default value - auto-scale
         words = len(text.split())
-        # Base tokens + per-word multiplier (conservative estimate)
-        estimated_tokens = 500 + (4 * words)
-        # Cap between 500 (minimum) and 5000 (safety limit for very long texts)
-        max_new_tokens = max(500, min(estimated_tokens, 5000))
-        print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} (base: 500 + 4*{words} words = {estimated_tokens}, capped)")
+        # Base tokens + per-word multiplier (generous estimate to prevent truncation)
+        # Each word typically needs ~8-10 tokens in SNAC encoding (accounting for pauses, prosody)
+        estimated_tokens = 500 + (10 * words)
+        # Cap between 500 (minimum) and 6000 (higher safety limit for very long texts)
+        max_new_tokens = max(500, min(estimated_tokens, 6000))
+        print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} (base: 500 + 10*{words} words = {estimated_tokens}, capped)")
     
     # Build prompt
     prompt = build_prompt(voice_description, text)
@@ -507,7 +534,7 @@ def handler(event: Dict[str, Any]) -> Dict[str, Any]:
             "text": "Hello world <laugh> this is great!",
             "voice_description": "Female, in her 30s with an American accent, energetic",
             "temperature": 0.6,  # Default 0.6 for reliable generation (0.5-0.7 recommended)
-            "max_new_tokens": 2000,  # Auto-scaled based on text length if 2000 (formula: 500 + 4*words, cap 5000)
+            "max_new_tokens": 2000,  # Auto-scaled based on text length if 2000 (formula: 500 + 10*words, cap 6000)
             "enable_chunking": true,  # Default: true. Chunks texts > 200 words to avoid truncation
             "upload_to_firebase": true,
             "firebase_user_id": "user123"
