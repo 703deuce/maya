@@ -141,35 +141,29 @@ def build_prompt(description: str, text: str) -> str:
     """
     Build formatted prompt for Maya1.
     
-    Uses chat template if available (matches official examples),
-    otherwise falls back to manual token construction.
+    Uses manual construction matching official Maya1 examples.
     """
+    # Format text with description (matching official examples)
     formatted_text = f'<description="{description}"> {text}'
     
-    # Try using chat template (official method)
-    try:
-        messages = [{"role": "user", "content": formatted_text}]
-        prompt = tokenizer.apply_chat_template(
-            messages, 
-            tokenize=False, 
-            add_generation_prompt=True
-        )
-        return prompt
-    except (AttributeError, KeyError, TypeError):
-        # Fallback to manual construction if chat template not available
-        soh_token = tokenizer.decode([SOH_ID])
-        eoh_token = tokenizer.decode([EOH_ID])
-        soa_token = tokenizer.decode([SOA_ID])
-        sos_token = tokenizer.decode([CODE_START_TOKEN_ID])
-        eot_token = tokenizer.decode([TEXT_EOT_ID])
-        bos_token = tokenizer.bos_token if tokenizer.bos_token else tokenizer.decode([BOS_ID])
-        
-        prompt = (
-            soh_token + bos_token + formatted_text + eot_token +
-            eoh_token + soa_token + sos_token
-        )
-        
-        return prompt
+    # Manual construction (matches official Quick Start example)
+    soh_token = tokenizer.decode([SOH_ID])
+    eoh_token = tokenizer.decode([EOH_ID])
+    soa_token = tokenizer.decode([SOA_ID])
+    sos_token = tokenizer.decode([CODE_START_TOKEN_ID])
+    eot_token = tokenizer.decode([TEXT_EOT_ID])
+    bos_token = tokenizer.bos_token if tokenizer.bos_token else tokenizer.decode([BOS_ID])
+    
+    prompt = (
+        soh_token + bos_token + formatted_text + eot_token +
+        eoh_token + soa_token + sos_token
+    )
+    
+    # Debug: print prompt to verify correct text is being used
+    print(f"DEBUG: Building prompt with text: {text[:100]}...")
+    print(f"DEBUG: Prompt preview: {prompt[:200]}...")
+    
+    return prompt
 
 
 def extract_snac_codes(token_ids: list) -> list:
@@ -232,10 +226,16 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     # Build prompt
     prompt = build_prompt(voice_description, text)
     
+    # Debug: Verify text is in prompt
+    print(f"DEBUG: Input text received: {text[:100]}...")
+    print(f"DEBUG: Prompt length: {len(prompt)} chars")
+    
     # Tokenize input (match official example format)
     inputs = tokenizer(prompt, return_tensors='pt')
     device = next(model.parameters()).device
     input_ids = inputs['input_ids'].to(device)
+    
+    print(f"DEBUG: Input token count: {input_ids.shape[1]} tokens")
     
     # Generate tokens with parameters matching official Maya1 examples
     with torch.no_grad():
