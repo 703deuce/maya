@@ -167,10 +167,19 @@ def build_prompt(description: str, text: str) -> str:
 
 
 def extract_snac_codes(token_ids: list) -> list:
-    """Extract SNAC codes from generated tokens."""
+    """
+    Extract SNAC codes from generated tokens.
+    
+    Uses the LAST occurrence of CODE_END_TOKEN_ID to avoid cutting off
+    early if the model emits an early EOS token due to sampling.
+    """
+    # Find the last occurrence of CODE_END_TOKEN_ID (not the first)
+    # This prevents early truncation if sampling produces a premature EOS
     try:
-        eos_idx = token_ids.index(CODE_END_TOKEN_ID)
+        # Reverse search to find last occurrence
+        eos_idx = len(token_ids) - 1 - token_ids[::-1].index(CODE_END_TOKEN_ID)
     except ValueError:
+        # No EOS token found, use all tokens
         eos_idx = len(token_ids)
     
     snac_codes = [
@@ -223,11 +232,22 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     if model is None or tokenizer is None:
         load_model()
     
+    # Calculate max_new_tokens based on text length if not explicitly set
+    # Rough estimate: ~10-15 tokens per word, with SNAC encoding overhead
+    # Scale max_new_tokens proportionally to ensure complete generation
+    if max_new_tokens == 2000:  # Default value - auto-scale
+        # Estimate: text length * factor (accounting for SNAC encoding)
+        # Each word roughly needs ~10-15 tokens in SNAC format
+        estimated_tokens = max(int(len(text.split()) * 12), 500)
+        max_new_tokens = min(estimated_tokens, 4000)  # Cap at 4000 for safety
+        print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} based on text length ({len(text.split())} words)")
+    
     # Build prompt
     prompt = build_prompt(voice_description, text)
     
     # Debug: Verify text is in prompt
     print(f"DEBUG: Input text received: {text[:100]}...")
+    print(f"DEBUG: Text length: {len(text)} chars, {len(text.split())} words")
     print(f"DEBUG: Prompt length: {len(prompt)} chars")
     
     # Tokenize input (match official example format)
@@ -236,6 +256,7 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     input_ids = inputs['input_ids'].to(device)
     
     print(f"DEBUG: Input token count: {input_ids.shape[1]} tokens")
+    print(f"DEBUG: Max new tokens: {max_new_tokens}")
     
     # Generate tokens with parameters matching official Maya1 examples
     with torch.no_grad():
@@ -255,11 +276,25 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     generated_ids = outputs[0, input_ids.shape[1]:].cpu().tolist()
     generated_tokens = generated_ids
     
-    # Extract SNAC codes
+    # Check if we hit max_new_tokens limit
+    if len(generated_tokens) >= max_new_tokens:
+        print(f"WARNING: Generated {len(generated_tokens)} tokens (max: {max_new_tokens}) - may have been truncated!")
+    
+    # Check for EOS token
+    if CODE_END_TOKEN_ID in generated_tokens:
+        eos_positions = [i for i, token in enumerate(generated_tokens) if token == CODE_END_TOKEN_ID]
+        print(f"DEBUG: Found {len(eos_positions)} EOS token(s) at positions: {eos_positions}")
+        print(f"DEBUG: Using last EOS at position {eos_positions[-1]} out of {len(generated_tokens)} tokens")
+    else:
+        print(f"WARNING: No EOS token found in generated tokens (length: {len(generated_tokens)})")
+    
+    # Extract SNAC codes (now uses last EOS, not first)
     snac_codes = extract_snac_codes(generated_tokens)
     
     if not snac_codes:
         raise ValueError("No SNAC codes generated. Model may not have produced valid audio tokens.")
+    
+    print(f"DEBUG: Extracted {len(snac_codes)} SNAC codes ({len(snac_codes) // 7} frames)")
     
     # Unpack SNAC tokens
     l1, l2, l3 = unpack_snac_from_7(snac_codes)
