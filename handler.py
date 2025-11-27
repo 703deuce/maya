@@ -232,10 +232,10 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     # Build prompt
     prompt = build_prompt(voice_description, text)
     
-    # Tokenize input
-    input_ids = tokenizer.encode(prompt, return_tensors='pt')
+    # Tokenize input (match official example format)
+    inputs = tokenizer(prompt, return_tensors='pt')
     device = next(model.parameters()).device
-    input_ids = input_ids.to(device)
+    input_ids = inputs['input_ids'].to(device)
     
     # Generate tokens with parameters matching official Maya1 examples
     with torch.no_grad():
