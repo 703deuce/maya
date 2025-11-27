@@ -8,8 +8,9 @@ import os
 import json
 import base64
 import io
+import re
 from datetime import datetime
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 import torch
 import numpy as np
@@ -103,7 +104,11 @@ def init_firebase():
 
 
 def load_model():
-    """Load Maya1 model and tokenizer (called once at startup)."""
+    """
+    Load Maya1 model and tokenizer (called once at startup).
+    
+    Ensures strict device consistency: model and SNAC decoder on same device.
+    """
     global model, tokenizer, snac_decoder
     
     if model is not None and tokenizer is not None:
@@ -126,12 +131,16 @@ def load_model():
     
     model.eval()
     
-    # Initialize SNAC decoder (load from pretrained model)
+    # Record device from model parameters (for strict consistency)
+    model_device = next(model.parameters()).device
+    print(f"Model loaded on device: {model_device}")
+    
+    # Initialize SNAC decoder and move to same device as model
+    # CRITICAL: Keep decoder and codes on same device to avoid device mismatch errors
     print("Loading SNAC decoder...")
     snac_decoder = SNAC.from_pretrained("hubertsiuzdak/snac_24khz").eval()
-    if device == 'cuda' and torch.cuda.is_available():
-        snac_decoder = snac_decoder.to('cuda')
-    print("SNAC decoder loaded")
+    snac_decoder = snac_decoder.to(model_device)  # Always match model device
+    print(f"SNAC decoder loaded and moved to device: {model_device}")
     
     print("Model loaded successfully")
     return model, tokenizer
@@ -220,7 +229,7 @@ def unpack_snac_from_7(snac_tokens: list) -> tuple:
     return (l1, l2, l3)
 
 
-def generate_audio(text: str, voice_description: str, temperature: float = 0.7, max_new_tokens: int = 2000) -> tuple:
+def generate_audio(text: str, voice_description: str, temperature: float = 0.6, max_new_tokens: int = 2000) -> tuple:
     """
     Generate audio from text and voice description.
     
@@ -233,14 +242,15 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
         load_model()
     
     # Calculate max_new_tokens based on text length if not explicitly set
-    # Rough estimate: ~10-15 tokens per word, with SNAC encoding overhead
-    # Scale max_new_tokens proportionally to ensure complete generation
+    # Use formula: base (500) + multiplier (4 * word_count) with cap
+    # This matches best practices from maya1-fastapi and vllm_streaming_inference
     if max_new_tokens == 2000:  # Default value - auto-scale
-        # Estimate: text length * factor (accounting for SNAC encoding)
-        # Each word roughly needs ~10-15 tokens in SNAC format
-        estimated_tokens = max(int(len(text.split()) * 12), 500)
-        max_new_tokens = min(estimated_tokens, 4000)  # Cap at 4000 for safety
-        print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} based on text length ({len(text.split())} words)")
+        words = len(text.split())
+        # Base tokens + per-word multiplier (conservative estimate)
+        estimated_tokens = 500 + (4 * words)
+        # Cap between 500 (minimum) and 5000 (safety limit for very long texts)
+        max_new_tokens = max(500, min(estimated_tokens, 5000))
+        print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} (base: 500 + 4*{words} words = {estimated_tokens}, capped)")
     
     # Build prompt
     prompt = build_prompt(voice_description, text)
@@ -252,8 +262,16 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     
     # Tokenize input (match official example format)
     inputs = tokenizer(prompt, return_tensors='pt')
+    # Get device from model (ensures consistency)
     device = next(model.parameters()).device
     input_ids = inputs['input_ids'].to(device)
+    
+    # Ensure SNAC decoder is on same device (safety check)
+    if snac_decoder is not None:
+        snac_decoder_device = next(snac_decoder.parameters()).device if list(snac_decoder.parameters()) else device
+        if snac_decoder_device != device:
+            print(f"WARNING: SNAC decoder device ({snac_decoder_device}) != model device ({device}), moving decoder...")
+            snac_decoder = snac_decoder.to(device)
     
     print(f"DEBUG: Input token count: {input_ids.shape[1]} tokens")
     print(f"DEBUG: Max new tokens: {max_new_tokens}")
@@ -276,15 +294,21 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     generated_ids = outputs[0, input_ids.shape[1]:].cpu().tolist()
     generated_tokens = generated_ids
     
-    # Check if we hit max_new_tokens limit
-    if len(generated_tokens) >= max_new_tokens:
-        print(f"WARNING: Generated {len(generated_tokens)} tokens (max: {max_new_tokens}) - may have been truncated!")
+    # Detect truncation (matching robust streaming inference patterns)
+    truncated = False
+    if CODE_END_TOKEN_ID not in generated_tokens and len(generated_tokens) >= max_new_tokens:
+        truncated = True
+        print(f"WARNING: Generation hit max_new_tokens ({max_new_tokens}) without EOS token - audio may end early/be truncated!")
+    elif len(generated_tokens) >= max_new_tokens:
+        print(f"WARNING: Generated exactly {max_new_tokens} tokens - may have hit limit before natural completion")
     
     # Check for EOS token
     if CODE_END_TOKEN_ID in generated_tokens:
         eos_positions = [i for i, token in enumerate(generated_tokens) if token == CODE_END_TOKEN_ID]
         print(f"DEBUG: Found {len(eos_positions)} EOS token(s) at positions: {eos_positions}")
         print(f"DEBUG: Using last EOS at position {eos_positions[-1]} out of {len(generated_tokens)} tokens")
+        if truncated:
+            print(f"INFO: Truncation detected but last EOS found - will use all tokens up to last EOS")
     else:
         print(f"WARNING: No EOS token found in generated tokens (length: {len(generated_tokens)})")
     
@@ -300,8 +324,8 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     l1, l2, l3 = unpack_snac_from_7(snac_codes)
     
     # Decode SNAC to audio using the correct API
-    # Convert to PyTorch tensors with batch dimension
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    # CRITICAL: All code tensors must be on same device as SNAC decoder
+    # Get device from model (which matches decoder device)
     codes_tensor = [
         torch.tensor(level, dtype=torch.long, device=device).unsqueeze(0)
         for level in [l1, l2, l3]
@@ -321,6 +345,91 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.7, 
     sampling_rate = 24000  # Maya1 uses 24kHz
     
     return audio_array, sampling_rate
+
+
+def chunk_text_by_sentences(text: str, max_words_per_chunk: int = 150, min_words_per_chunk: int = 50) -> List[str]:
+    """
+    Chunk long text into smaller pieces by sentences.
+    
+    Args:
+        text: Input text to chunk
+        max_words_per_chunk: Maximum words per chunk (roughly ~20-25 seconds of speech)
+        min_words_per_chunk: Minimum words per chunk (to avoid tiny fragments)
+    
+    Returns:
+        List of text chunks
+    """
+    # Split by sentence boundaries (period, exclamation, question mark)
+    # Keep the punctuation with the sentence
+    sentence_pattern = r'([.!?]+[\s]+)'
+    sentences = re.split(sentence_pattern, text)
+    
+    # Rejoin sentences with their punctuation
+    chunks = []
+    current_chunk = ""
+    current_word_count = 0
+    
+    i = 0
+    while i < len(sentences):
+        sentence = sentences[i]
+        if i + 1 < len(sentences):
+            sentence += sentences[i + 1]  # Include punctuation
+            i += 1
+        
+        sentence_words = len(sentence.split())
+        
+        # If adding this sentence would exceed max, save current chunk and start new one
+        if current_word_count + sentence_words > max_words_per_chunk and current_chunk:
+            # Only save if we've accumulated enough words
+            if current_word_count >= min_words_per_chunk:
+                chunks.append(current_chunk.strip())
+                current_chunk = sentence
+                current_word_count = sentence_words
+            else:
+                # Current chunk too small, add sentence anyway (but warn if way over)
+                current_chunk += sentence
+                current_word_count += sentence_words
+        else:
+            current_chunk += sentence
+            current_word_count += sentence_words
+        
+        i += 1
+    
+    # Add remaining chunk
+    if current_chunk.strip():
+        chunks.append(current_chunk.strip())
+    
+    # If no sentence boundaries found, split by length
+    if not chunks:
+        words = text.split()
+        for i in range(0, len(words), max_words_per_chunk):
+            chunk = ' '.join(words[i:i + max_words_per_chunk])
+            if chunk:
+                chunks.append(chunk)
+    
+    return chunks if chunks else [text]
+
+
+def concatenate_audio_arrays(audio_arrays: List[np.ndarray], sampling_rate: int) -> np.ndarray:
+    """
+    Concatenate multiple audio arrays into one.
+    
+    Args:
+        audio_arrays: List of audio arrays to concatenate
+        sampling_rate: Sampling rate (must be same for all)
+    
+    Returns:
+        Concatenated audio array
+    """
+    if not audio_arrays:
+        raise ValueError("No audio arrays to concatenate")
+    
+    if len(audio_arrays) == 1:
+        return audio_arrays[0]
+    
+    # Concatenate all arrays
+    concatenated = np.concatenate(audio_arrays)
+    return concatenated
 
 
 def audio_to_base64(audio_array: np.ndarray, sampling_rate: int) -> str:
@@ -397,8 +506,9 @@ def handler(event: Dict[str, Any]) -> Dict[str, Any]:
         "input": {
             "text": "Hello world <laugh> this is great!",
             "voice_description": "Female, in her 30s with an American accent, energetic",
-            "temperature": 0.7,
-            "max_new_tokens": 2000,
+            "temperature": 0.6,  # Default 0.6 for reliable generation (0.5-0.7 recommended)
+            "max_new_tokens": 2000,  # Auto-scaled based on text length if 2000 (formula: 500 + 4*words, cap 5000)
+            "enable_chunking": true,  # Default: true. Chunks texts > 200 words to avoid truncation
             "upload_to_firebase": true,
             "firebase_user_id": "user123"
         }
@@ -413,7 +523,9 @@ def handler(event: Dict[str, Any]) -> Dict[str, Any]:
         input_data = event.get('input', {})
         text = input_data.get('text', '')
         voice_description = input_data.get('voice_description', 'Neutral voice, clear speech')
-        temperature = float(input_data.get('temperature', 0.7))
+        # Use more conservative default temperature (0.6) for reliable generation
+        # Higher temps can cause early EOS emission and variability
+        temperature = float(input_data.get('temperature', 0.6))
         max_new_tokens = int(input_data.get('max_new_tokens', 2000))
         upload_to_firebase_flag = input_data.get('upload_to_firebase', False)
         firebase_user_id = input_data.get('firebase_user_id', '')
@@ -431,13 +543,43 @@ def handler(event: Dict[str, Any]) -> Dict[str, Any]:
                 "status": "FAILED"
             }
         
-        # Generate audio
-        audio_array, sampling_rate = generate_audio(
-            text=text,
-            voice_description=voice_description,
-            temperature=temperature,
-            max_new_tokens=max_new_tokens
-        )
+        # Optional: Chunk long texts to avoid truncation issues
+        # For texts > 200 words, chunk by sentences to ensure complete generation
+        enable_chunking = input_data.get('enable_chunking', True)  # Default: enabled
+        word_count = len(text.split())
+        chunk_threshold = 200  # Words threshold for chunking
+        
+        if enable_chunking and word_count > chunk_threshold:
+            print(f"INFO: Text is long ({word_count} words > {chunk_threshold}), chunking into smaller pieces...")
+            text_chunks = chunk_text_by_sentences(text, max_words_per_chunk=150, min_words_per_chunk=50)
+            print(f"INFO: Split into {len(text_chunks)} chunk(s)")
+            
+            # Generate audio for each chunk
+            audio_chunks = []
+            for i, chunk in enumerate(text_chunks):
+                print(f"INFO: Generating audio for chunk {i+1}/{len(text_chunks)} ({len(chunk.split())} words)...")
+                chunk_audio, sampling_rate = generate_audio(
+                    text=chunk,
+                    voice_description=voice_description,
+                    temperature=temperature,
+                    max_new_tokens=max_new_tokens  # Will auto-scale per chunk
+                )
+                audio_chunks.append(chunk_audio)
+            
+            # Concatenate all chunks
+            print(f"INFO: Concatenating {len(audio_chunks)} audio chunk(s)...")
+            audio_array = concatenate_audio_arrays(audio_chunks, sampling_rate)
+            print(f"INFO: Final audio length: {len(audio_array) / sampling_rate:.2f} seconds")
+        else:
+            # Generate audio normally (single chunk)
+            if enable_chunking:
+                print(f"INFO: Text is short ({word_count} words <= {chunk_threshold}), generating without chunking")
+            audio_array, sampling_rate = generate_audio(
+                text=text,
+                voice_description=voice_description,
+                temperature=temperature,
+                max_new_tokens=max_new_tokens
+            )
         
         # Calculate duration
         duration = len(audio_array) / sampling_rate
