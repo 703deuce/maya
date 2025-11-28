@@ -269,10 +269,10 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
         load_model()
     
     # Calculate max_new_tokens based on text length if not explicitly set
-    # Use formula: base (500) + multiplier (8-10 * word_count) with cap
+    # Use formula: base (500) + multiplier (10 * word_count) with cap
     # More generous multiplier to ensure complete generation (each word may need 8-10 tokens)
     # This matches best practices from maya1-fastapi and vllm_streaming_inference
-    if max_new_tokens == 2000:  # Default value - auto-scale
+    if max_new_tokens == 2000:  # Default value - auto-scale (2000 is just a sentinel)
         words = len(text.split())
         # Base tokens + per-word multiplier (generous estimate to prevent truncation)
         # Each word typically needs ~8-10 tokens in SNAC encoding (accounting for pauses, prosody)
@@ -280,6 +280,7 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
         # Cap between 500 (minimum) and 6000 (higher safety limit for very long texts)
         max_new_tokens = max(500, min(estimated_tokens, 6000))
         print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} (base: 500 + 10*{words} words = {estimated_tokens}, capped)")
+        print(f"DEBUG: For {words} words, token limit is {max_new_tokens} (should be plenty)")
     
     # Build prompt
     prompt = build_prompt(voice_description, text)
@@ -325,6 +326,8 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
     
     # CRITICAL DIAGNOSTICS: Log token generation details
     print(f"DEBUG: Generated {len(generated_tokens)} tokens (max allowed: {max_new_tokens})")
+    token_usage_pct = (len(generated_tokens) / max_new_tokens) * 100 if max_new_tokens > 0 else 0
+    print(f"DEBUG: Token usage: {token_usage_pct:.1f}% ({len(generated_tokens)}/{max_new_tokens})")
     
     # Detect truncation (matching robust streaming inference patterns)
     truncated = False
@@ -347,6 +350,13 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
         print(f"⚠️ WARNING: No EOS token found in generated tokens (length: {len(generated_tokens)})")
         if len(generated_tokens) < max_new_tokens:
             print(f"INFO: Generation stopped early without EOS - may indicate model completion or other issue")
+    
+    # SUMMARY: Model behavior vs limit
+    if not truncated and len(generated_tokens) < max_new_tokens * 0.8:  # Used less than 80% of limit
+        print(f"✅ Model stopped naturally: Used {len(generated_tokens)}/{max_new_tokens} tokens ({token_usage_pct:.1f}%)")
+        print(f"   → This is model behavior, not a token limit issue")
+        if CODE_END_TOKEN_ID not in generated_tokens:
+            print(f"   → Model stopped without EOS - may indicate early completion or sampling behavior")
     
     # Extract SNAC codes (MUST use last EOS, not first)
     snac_codes = extract_snac_codes(generated_tokens)
