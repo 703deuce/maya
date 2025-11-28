@@ -635,11 +635,11 @@ def handler(event: Dict[str, Any]) -> Dict[str, Any]:
                 "status": "FAILED"
             }
         
-        # Optional: Chunk long texts to avoid truncation issues
-        # For texts > 200 words, chunk by sentences to ensure complete generation
+        # Chunk only for truly long text (>200 words)
+        # For short/medium text, use generous fixed token cap and rely on EOS for completion
         enable_chunking = input_data.get('enable_chunking', True)  # Default: enabled
         word_count = len(text.split())
-        chunk_threshold = 200  # Words threshold for chunking
+        chunk_threshold = 200  # Words threshold for chunking - only chunk truly long text
         
         if enable_chunking and word_count > chunk_threshold:
             print(f"INFO: Text is long ({word_count} words > {chunk_threshold}), chunking into smaller pieces...")
