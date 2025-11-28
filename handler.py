@@ -303,7 +303,7 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
     # IMPORTANT: Don't use add_special_tokens=False - we want the tokenizer to handle tags properly
     inputs = tokenizer(prompt, return_tensors='pt')
     
-    # Debug: Verify tags are preserved after tokenization
+    # Debug: Verify tags are preserved after tokenization AND check how they're tokenized
     input_token_ids = inputs['input_ids'][0].tolist()
     input_text_decoded = tokenizer.decode(input_token_ids, skip_special_tokens=False)
     if emotion_tags:
@@ -311,6 +311,21 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
         for tag in emotion_tags:
             if tag in input_text_decoded.lower():
                 print(f"✅ Tag '{tag}' preserved in tokenized text")
+                
+                # CRITICAL: Check if tag is tokenized as single token or split
+                # Find tag position in original text
+                tag_lower = tag.lower()
+                tag_upper = tag  # Preserve case from original
+                if tag_lower in text.lower():
+                    tag_pos = text.lower().find(tag_lower)
+                    # Tokenize just the tag to see how it's split
+                    tag_tokens = tokenizer.encode(tag_upper, add_special_tokens=False)
+                    print(f"DEBUG: Tag '{tag}' tokenizes to {len(tag_tokens)} token(s): {tag_tokens}")
+                    if len(tag_tokens) > 3:
+                        print(f"⚠️ WARNING: Tag '{tag}' is split into {len(tag_tokens)} tokens - might cause issues!")
+                        print(f"   Tokens: {[tokenizer.decode([t]) for t in tag_tokens]}")
+                    else:
+                        print(f"✅ Tag '{tag}' tokenizes cleanly ({len(tag_tokens)} tokens)")
             else:
                 print(f"⚠️ WARNING: Emotion tag '{tag}' may have been lost/modified during tokenization!")
                 print(f"   Original text snippet: {text[max(0, text.lower().find(tag)-20):text.lower().find(tag)+len(tag)+20]}")
