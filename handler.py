@@ -203,28 +203,28 @@ def unpack_snac_from_7(snac_tokens: list) -> tuple:
     """
     Unpack 7-token SNAC frames to 3 hierarchical levels.
     
-    Handles partial frames gracefully - if the last frame is incomplete,
-    we include as much as we can rather than truncating everything.
+    CRITICAL: Handles partial frames by padding (not discarding) to preserve all audio.
     """
     if snac_tokens and snac_tokens[-1] == CODE_END_TOKEN_ID:
         snac_tokens = snac_tokens[:-1]
     
-    # Calculate complete frames, but don't truncate if we have partial frame
-    # This ensures we use all generated SNAC tokens, even if the last frame is incomplete
-    frames = len(snac_tokens) // SNAC_TOKENS_PER_FRAME
-    remaining = len(snac_tokens) % SNAC_TOKENS_PER_FRAME
+    # Calculate frames and remainder
+    total_tokens = len(snac_tokens)
+    frames = total_tokens // SNAC_TOKENS_PER_FRAME
+    remainder = total_tokens % SNAC_TOKENS_PER_FRAME
     
-    if remaining > 0:
-        print(f"WARNING: {remaining} extra SNAC tokens after {frames} complete frames - may indicate incomplete generation")
-        # Include partial frame if it has at least 3 tokens (minimal useful data)
-        if remaining >= 3:
-            print(f"INFO: Including partial frame with {remaining} tokens")
-            frames += 1
-            # Pad to complete frame length with zeros (or repeat last token)
-            padding_needed = SNAC_TOKENS_PER_FRAME - remaining
-            snac_tokens = snac_tokens + [snac_tokens[-1]] * padding_needed
+    print(f"DEBUG: unpack_snac_from_7: {total_tokens} tokens = {frames} complete frames + {remainder} remainder")
     
-    # Now truncate to exact frame boundaries
+    # CRITICAL: Don't throw away partial frames - pad them instead
+    if remainder > 0:
+        print(f"⚠️ WARNING: {remainder} tokens in incomplete final frame - padding to preserve audio")
+        # Pad with last token to complete the frame (better than dropping)
+        padding_needed = SNAC_TOKENS_PER_FRAME - remainder
+        snac_tokens = snac_tokens + [snac_tokens[-1]] * padding_needed
+        frames += 1
+        print(f"DEBUG: Padded to {frames} complete frames (added {padding_needed} padding tokens)")
+    
+    # Now we have exact frame boundaries
     snac_tokens = snac_tokens[:frames * SNAC_TOKENS_PER_FRAME]
     
     if frames == 0:
@@ -234,10 +234,11 @@ def unpack_snac_from_7(snac_tokens: list) -> tuple:
     
     for i in range(frames):
         slots = snac_tokens[i*7:(i+1)*7]
-        # Ensure we have exactly 7 slots
-        if len(slots) < 7:
-            print(f"WARNING: Frame {i} has only {len(slots)} slots, padding...")
-            slots = slots + [slots[-1] if slots else CODE_TOKEN_OFFSET] * (7 - len(slots))
+        # Safety check - should always be 7 now
+        if len(slots) != 7:
+            print(f"⚠️ ERROR: Frame {i} has {len(slots)} slots (expected 7) - padding...")
+            while len(slots) < 7:
+                slots.append(slots[-1] if slots else CODE_TOKEN_OFFSET)
         
         l1.append((slots[0] - CODE_TOKEN_OFFSET) % 4096)
         l2.extend([
@@ -251,6 +252,7 @@ def unpack_snac_from_7(snac_tokens: list) -> tuple:
             (slots[6] - CODE_TOKEN_OFFSET) % 4096,
         ])
     
+    print(f"DEBUG: Unpacked to levels: l1={len(l1)}, l2={len(l2)}, l3={len(l3)}")
     return (l1, l2, l3)
 
 
@@ -321,31 +323,46 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
     generated_ids = outputs[0, input_ids.shape[1]:].cpu().tolist()
     generated_tokens = generated_ids
     
+    # CRITICAL DIAGNOSTICS: Log token generation details
+    print(f"DEBUG: Generated {len(generated_tokens)} tokens (max allowed: {max_new_tokens})")
+    
     # Detect truncation (matching robust streaming inference patterns)
     truncated = False
     if CODE_END_TOKEN_ID not in generated_tokens and len(generated_tokens) >= max_new_tokens:
         truncated = True
-        print(f"WARNING: Generation hit max_new_tokens ({max_new_tokens}) without EOS token - audio may end early/be truncated!")
+        print(f"⚠️ CRITICAL: Generation hit max_new_tokens ({max_new_tokens}) without EOS token - audio WILL be truncated!")
     elif len(generated_tokens) >= max_new_tokens:
-        print(f"WARNING: Generated exactly {max_new_tokens} tokens - may have hit limit before natural completion")
+        print(f"⚠️ WARNING: Generated exactly {max_new_tokens} tokens - may have hit limit before natural completion")
     
-    # Check for EOS token
+    # Check for EOS token - log ALL positions
     if CODE_END_TOKEN_ID in generated_tokens:
         eos_positions = [i for i, token in enumerate(generated_tokens) if token == CODE_END_TOKEN_ID]
         print(f"DEBUG: Found {len(eos_positions)} EOS token(s) at positions: {eos_positions}")
+        if len(eos_positions) > 1:
+            print(f"⚠️ WARNING: Multiple EOS tokens found! Using LAST one at position {eos_positions[-1]}")
         print(f"DEBUG: Using last EOS at position {eos_positions[-1]} out of {len(generated_tokens)} tokens")
         if truncated:
             print(f"INFO: Truncation detected but last EOS found - will use all tokens up to last EOS")
     else:
-        print(f"WARNING: No EOS token found in generated tokens (length: {len(generated_tokens)})")
+        print(f"⚠️ WARNING: No EOS token found in generated tokens (length: {len(generated_tokens)})")
+        if len(generated_tokens) < max_new_tokens:
+            print(f"INFO: Generation stopped early without EOS - may indicate model completion or other issue")
     
-    # Extract SNAC codes (now uses last EOS, not first)
+    # Extract SNAC codes (MUST use last EOS, not first)
     snac_codes = extract_snac_codes(generated_tokens)
     
     if not snac_codes:
         raise ValueError("No SNAC codes generated. Model may not have produced valid audio tokens.")
     
-    print(f"DEBUG: Extracted {len(snac_codes)} SNAC codes ({len(snac_codes) // 7} frames)")
+    # CRITICAL DIAGNOSTICS: Check for partial frames
+    total_snac_tokens = len(snac_codes)
+    complete_frames = total_snac_tokens // SNAC_TOKENS_PER_FRAME
+    remainder_tokens = total_snac_tokens % SNAC_TOKENS_PER_FRAME
+    
+    print(f"DEBUG: Extracted {total_snac_tokens} SNAC codes")
+    print(f"DEBUG: Complete frames: {complete_frames}, Remainder tokens: {remainder_tokens}")
+    if remainder_tokens > 0:
+        print(f"⚠️ WARNING: {remainder_tokens} tokens in incomplete frame - may lose last {remainder_tokens} tokens!")
     
     # Unpack SNAC tokens
     l1, l2, l3 = unpack_snac_from_7(snac_codes)
