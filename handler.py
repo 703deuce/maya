@@ -269,17 +269,18 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
         load_model()
     
     # Calculate max_new_tokens based on text length if not explicitly set
-    # Use formula: base (500) + multiplier (10 * word_count) with cap
-    # More generous multiplier to ensure complete generation (each word may need 8-10 tokens)
+    # Use formula: base (500) + multiplier (15 * word_count) with cap
+    # Increased multiplier to ensure complete generation - longer texts with emotion tags need more tokens
     # This matches best practices from maya1-fastapi and vllm_streaming_inference
     if max_new_tokens == 2000:  # Default value - auto-scale (2000 is just a sentinel)
         words = len(text.split())
-        # Base tokens + per-word multiplier (generous estimate to prevent truncation)
-        # Each word typically needs ~8-10 tokens in SNAC encoding (accounting for pauses, prosody)
-        estimated_tokens = 500 + (10 * words)
-        # Cap between 500 (minimum) and 6000 (higher safety limit for very long texts)
-        max_new_tokens = max(500, min(estimated_tokens, 6000))
-        print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} (base: 500 + 10*{words} words = {estimated_tokens}, capped)")
+        # Base tokens + per-word multiplier (more generous to prevent truncation)
+        # Each word typically needs ~12-15 tokens in SNAC encoding (accounting for pauses, prosody, emotion tags)
+        # Emotion tags and longer texts may need even more tokens
+        estimated_tokens = 500 + (15 * words)
+        # Cap between 500 (minimum) and 8000 (higher safety limit for very long texts)
+        max_new_tokens = max(500, min(estimated_tokens, 8000))
+        print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} (base: 500 + 15*{words} words = {estimated_tokens}, capped)")
         print(f"DEBUG: For {words} words, token limit is {max_new_tokens} (should be plenty)")
     
     # Build prompt
