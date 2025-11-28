@@ -1,25 +1,17 @@
 #!/usr/bin/env python3
 """
-Simple test script for Maya1 RunPod Endpoint
-Quick test with a single request
+Test Maya1 endpoint with emotion tags and longer text
 """
 
 import requests
 import json
 import base64
+import time
 
-# RunPod Configuration
-import os
-RUNPOD_API_KEY = os.getenv("RUNPOD_API_KEY", "")
+RUNPOD_API_KEY = "rpa_C55TBQG7H6FM7G3Q7A6JM7ZJCDKA3I2J3EO0TAH8fxyddo"
 ENDPOINT_URL = "https://api.runpod.ai/v2/o10i3yz4aaajfc/run"
 
-if not RUNPOD_API_KEY:
-    raise ValueError("RUNPOD_API_KEY environment variable is required")
-
-def test_endpoint():
-    """Simple endpoint test."""
-    import time
-    
+def test_with_emotions():
     headers = {
         "Authorization": f"Bearer {RUNPOD_API_KEY}",
         "Content-Type": "application/json"
@@ -27,50 +19,33 @@ def test_endpoint():
     
     payload = {
         "input": {
-            "text": "Hello everyone! <laugh> This is a test with emotion tags. <excited> I hope the tags work properly!",
-            "voice_description": "Female voice, American accent, clear and professional",
-            # MOST CONSISTENT PARAMETERS:
-            "temperature": 0.7,  # Higher temperature for better emotion tag expressiveness
-            "max_new_tokens": 2000,  # Let auto-scaling handle it (500 + 10*words formula) - most reliable
+            "text": "Welcome to our podcast! <laugh> Today we have an absolutely amazing guest. <gasp> This is incredible! We're going to have so much fun exploring this fascinating topic together. <laugh_harder> I can't wait to share this with all of you listening at home.",
+            "voice_description": "Female, in her 30s with an American accent, energetic, clear diction, enthusiastic",
+            "temperature": 0.7,
+            "max_new_tokens": 1500,
             "upload_to_firebase": False
         }
     }
     
-    print("Testing Maya1 RunPod Endpoint")
-    print("=" * 50)
-    print(f"Endpoint: {ENDPOINT_URL}")
-    print(f"Request payload:")
-    print(json.dumps(payload, indent=2))
-    print("\nSending async request...")
+    print("Testing Maya1 with Emotion Tags")
+    print("=" * 60)
+    print(f"Text: {payload['input']['text']}")
+    print(f"\nSending request...")
     
     try:
-        # Step 1: Submit job
-        response = requests.post(
-            ENDPOINT_URL,
-            headers=headers,
-            json=payload,
-            timeout=30
-        )
-        
+        # Submit job
+        response = requests.post(ENDPOINT_URL, headers=headers, json=payload, timeout=30)
         response.raise_for_status()
         job_data = response.json()
-        
         job_id = job_data.get('id')
-        if not job_id:
-            print(f"\n❌ No job ID in response: {job_data}")
-            return False
         
         print(f"✅ Job submitted: {job_id}")
-        print(f"   Status: {job_data.get('status', 'UNKNOWN')}")
         
-        # Step 2: Poll for completion
-        # Extract base URL (remove /run from end if present)
+        # Poll for completion
         base_url = ENDPOINT_URL.rstrip('/run').rstrip('/')
         status_url = f"{base_url}/status/{job_id}"
-        print(f"\nPolling for completion...")
-        print(f"Status URL: {status_url}")
         
-        max_wait = 300  # 5 minutes
+        max_wait = 300
         start_time = time.time()
         poll_count = 0
         
@@ -87,9 +62,8 @@ def test_endpoint():
             
             if status == 'COMPLETED':
                 print(f"\n✅ Job completed!")
-                print("=" * 50)
+                print("=" * 60)
                 
-                # Extract nested output structure
                 output = result.get('output', {})
                 if isinstance(output, dict) and 'output' in output:
                     output = output['output']
@@ -100,20 +74,17 @@ def test_endpoint():
                 
                 audio_base64 = output.get('audio_base64', '')
                 if audio_base64:
-                    # Save audio file
                     audio_bytes = base64.b64decode(audio_base64)
-                    output_file = 'test_output.wav'
+                    output_file = 'test_emotions.wav'
                     with open(output_file, 'wb') as f:
                         f.write(audio_bytes)
                     print(f"   ✅ Audio saved to: {output_file}")
                     print(f"   Audio size: {len(audio_bytes) / 1024:.2f} KB")
+                    print(f"\n✅ Success! Audio generated with emotion tags.")
+                    return True
                 else:
                     print(f"   ⚠️  No audio data in response")
-                
-                if 'firebase_url' in output:
-                    print(f"   Firebase URL: {output['firebase_url']}")
-                
-                return True
+                    return False
             
             elif status == 'FAILED':
                 print(f"\n❌ Job failed")
@@ -126,26 +97,15 @@ def test_endpoint():
             
             time.sleep(2)
         
-        print(f"\n❌ Timeout: Job did not complete within {max_wait} seconds")
+        print(f"\n❌ Timeout")
         return False
     
-    except requests.exceptions.Timeout:
-        print("\n❌ Request timeout")
-        return False
-    except requests.exceptions.RequestException as e:
-        print(f"\n❌ Request failed: {e}")
-        if hasattr(e, 'response') and e.response is not None:
-            print(f"   Response: {e.response.text}")
-        return False
     except Exception as e:
-        print(f"\n❌ Unexpected error: {e}")
+        print(f"\n❌ Error: {e}")
         import traceback
         traceback.print_exc()
         return False
 
-
 if __name__ == "__main__":
-    import sys
-    success = test_endpoint()
-    sys.exit(0 if success else 1)
+    test_with_emotions()
 

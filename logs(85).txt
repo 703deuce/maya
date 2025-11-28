@@ -1,0 +1,36 @@
+2025-11-27T19:48:55.140155993Z ==========
+2025-11-27T19:48:55.140163216Z == CUDA ==
+2025-11-27T19:48:55.140292933Z ==========
+2025-11-27T19:48:55.146876592Z CUDA Version 12.1.0
+2025-11-27T19:48:55.149521988Z Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+2025-11-27T19:48:55.151731226Z This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+2025-11-27T19:48:55.151737608Z By pulling and using the container, you accept the terms and conditions of this license:
+2025-11-27T19:48:55.151744251Z https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+2025-11-27T19:48:55.151755031Z A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+2025-11-27T19:48:55.172969849Z *************************
+2025-11-27T19:48:55.173017470Z ** DEPRECATION NOTICE! **
+2025-11-27T19:48:55.173351615Z *************************
+2025-11-27T19:48:55.173400588Z THIS IMAGE IS DEPRECATED and is scheduled for DELETION.
+2025-11-27T19:48:55.173416548Z     https://gitlab.com/nvidia/container-images/cuda/blob/master/doc/support-policy.md
+2025-11-27T19:48:59.116886783Z /usr/local/lib/python3.10/dist-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.12) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+2025-11-27T19:48:59.116952728Z   warnings.warn(message, FutureWarning)
+2025-11-27T19:49:00.535006966Z Loading model maya-research/maya1 on cuda...
+2025-11-27T19:49:16.263258471Z `torch_dtype` is deprecated! Use `dtype` instead!
+2025-11-27T19:49:55.430406547Z Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files:  50%|█████     | 1/2 [00:38<00:38, 38.35s/it]Fetching 2 files: 100%|██████████| 2/2 [00:38<00:00, 19.17s/it]
+2025-11-27T19:49:55.617826718Z modeling.py         :987  2025-11-27 19:49:55,617 We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+2025-11-27T19:49:56.744320348Z Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.21it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  2.01it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.83it/s]
+2025-11-27T19:49:57.404648498Z Model loaded successfully
+2025-11-27T19:49:57.404689836Z Firebase credentials not found in environment variables
+2025-11-27T19:49:57.404700437Z --- Starting Serverless Worker |  Version 1.8.1 ---
+2025-11-27T19:49:58.122163143Z {"requestId": null, "message": "Jobs in queue: 1", "level": "INFO"}
+2025-11-27T19:49:58.122206556Z {"requestId": null, "message": "Jobs in progress: 1", "level": "INFO"}
+2025-11-27T19:49:58.122303330Z {"requestId": "d4a371a0-29eb-4a0f-8895-3c7cfc4384aa-u2", "message": "Started.", "level": "INFO"}
+2025-11-27T19:49:58.190628618Z The attention mask is not set and cannot be inferred from input because pad token is same as eos token. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+2025-11-27T19:50:06.757226064Z Error in handler: SNAC.decode() takes 2 positional arguments but 4 were given
+2025-11-27T19:50:06.757257604Z Traceback (most recent call last):
+2025-11-27T19:50:06.757292771Z   File "/app/handler.py", line 358, in handler
+2025-11-27T19:50:06.757298802Z     audio_array, sampling_rate = generate_audio(
+2025-11-27T19:50:06.757304122Z   File "/app/handler.py", line 243, in generate_audio
+2025-11-27T19:50:06.757312348Z     audio_array = snac_decoder.decode(l1, l2, l3)
+2025-11-27T19:50:06.757361071Z TypeError: SNAC.decode() takes 2 positional arguments but 4 were given
+2025-11-27T19:50:07.125413655Z {"requestId": "d4a371a0-29eb-4a0f-8895-3c7cfc4384aa-u2", "message": "Finished.", "level": "INFO"}

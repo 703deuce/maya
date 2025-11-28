@@ -61,3 +61,8 @@ serviceAccountKey.json
 # Docker
 .dockerignore
 
+# Test outputs
+test_output/
+test_output*.wav
+*.wav
+

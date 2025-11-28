@@ -268,20 +268,23 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
     if model is None or tokenizer is None:
         load_model()
     
-    # Calculate max_new_tokens based on text length if not explicitly set
-    # Use formula: base (500) + multiplier (15 * word_count) with cap
-    # Increased multiplier to ensure complete generation - longer texts with emotion tags need more tokens
-    # This matches best practices from maya1-fastapi and vllm_streaming_inference
-    if max_new_tokens == 2000:  # Default value - auto-scale (2000 is just a sentinel)
+    # Set max_new_tokens: Use fixed generous cap (no word-count guessing)
+    # Official Maya examples use fixed values (e.g. 2048), not word-count heuristics
+    # Text length → audio length → SNAC token count is NOT linear or fixed
+    # We rely on EOS token detection for completion, not the token limit
+    if max_new_tokens == 2000:  # Default value - replace with fixed cap
+        # For short/medium text (≤200 words): Use generous fixed cap
+        # This prevents truncation while allowing EOS to determine actual completion
         words = len(text.split())
-        # Base tokens + per-word multiplier (very generous to prevent truncation)
-        # Each word typically needs ~15-20 tokens in SNAC encoding (accounting for pauses, prosody, emotion tags)
-        # Emotion tags significantly increase token requirements - need more headroom
-        estimated_tokens = 500 + (20 * words)
-        # Cap between 500 (minimum) and 10000 (higher safety limit for very long texts)
-        max_new_tokens = max(500, min(estimated_tokens, 10000))
-        print(f"DEBUG: Auto-scaled max_new_tokens to {max_new_tokens} (base: 500 + 15*{words} words = {estimated_tokens}, capped)")
-        print(f"DEBUG: For {words} words, token limit is {max_new_tokens} (should be plenty)")
+        if words <= 200:
+            max_new_tokens = 4000  # Fixed generous cap for short/medium text (matches official approach)
+            print(f"DEBUG: Using fixed max_new_tokens: {max_new_tokens} for {words} words (relying on EOS for completion)")
+        else:
+            # For very long text (>200 words): Use larger cap (chunking will handle these)
+            max_new_tokens = 6000
+            print(f"DEBUG: Using fixed max_new_tokens: {max_new_tokens} for {words} words (long text, will be chunked)")
+        
+        print(f"DEBUG: Completion determined by EOS token detection, not token limit")
     
     # Build prompt
     prompt = build_prompt(voice_description, text)
@@ -599,7 +602,7 @@ def handler(event: Dict[str, Any]) -> Dict[str, Any]:
             "text": "Hello world <laugh> this is great!",
             "voice_description": "Female, in her 30s with an American accent, energetic",
             "temperature": 0.6,  # Default 0.6 for reliable generation (0.5-0.7 recommended)
-            "max_new_tokens": 2000,  # Auto-scaled based on text length if 2000 (formula: 500 + 10*words, cap 6000)
+            "max_new_tokens": 2000,  # Fixed cap (4000 for ≤200 words, 6000 for >200 words) - relies on EOS for completion
             "enable_chunking": true,  # Default: true. Chunks texts > 200 words to avoid truncation
             "upload_to_firebase": true,
             "firebase_user_id": "user123"

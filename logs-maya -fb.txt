@@ -1,0 +1,500 @@
+2025-11-27  14:34:54.994 | info | s6orqkshg7dl65 | Loading model maya-research/maya1 on cuda...\n
+2025-11-27  14:34:54.994 | info | s6orqkshg7dl65 |   warnings.warn(message, FutureWarning)\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | /usr/local/lib/python3.10/dist-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.12) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | \n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 |     https://gitlab.com/nvidia/container-images/cuda/blob/master/doc/support-policy.md\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | THIS IMAGE IS DEPRECATED and is scheduled for DELETION.\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | *************************\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | ** DEPRECATION NOTICE! **\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | *************************\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | \n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | \n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | By pulling and using the container, you accept the terms and conditions of this license:\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | This container image and its contents are governed by the NVIDIA Deep Learning Container License.\n
+2025-11-27  14:34:53.507 | info | s6orqkshg7dl65 | \n
+2025-11-27  14:34:53.506 | info | s6orqkshg7dl65 | Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.\n
+2025-11-27  14:34:53.506 | info | s6orqkshg7dl65 | \n
+2025-11-27  14:34:53.506 | info | s6orqkshg7dl65 | CUDA Version 12.1.0\n
+2025-11-27  14:34:53.506 | info | s6orqkshg7dl65 | \n
+2025-11-27  14:34:53.506 | info | s6orqkshg7dl65 | ==========\n
+2025-11-27  14:34:53.506 | info | s6orqkshg7dl65 | == CUDA ==\n
+2025-11-27  14:34:53.506 | info | s6orqkshg7dl65 | ==========\n
+2025-11-27  14:34:53.506 | info | s6orqkshg7dl65 | \n
+2025-11-27  14:34:45.483 | error | s6orqkshg7dl65 | worker exited with exit code 1
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 | RuntimeError: Data processing error: CAS service error : IO Error: No space left on device (os error 28)\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |     download_files(\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 626, in xet_get\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |     xet_get(\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |     _download_to_tmp_and_move(\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |     return _hf_hub_download_to_cache_dir(\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |     return fn(*args, **kwargs)\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |     return hf_hub_download(\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download\n
+2025-11-27  14:34:44.097 | info | s6orqkshg7dl65 |     result = self.fn(*self.args, **self.kwargs)\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     raise self._exception\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     return self.__get_result()\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 458, in result\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     return fut.result(timeout)\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     yield _result_or_cancel(fs.pop())\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     for obj in iterable:\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1181, in __iter__\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     thread_map(\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     return fn(*args, **kwargs)\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     snapshot_download(\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 494, in cached_files\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     raise e\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 567, in cached_files\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     cached_filenames = cached_files(\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files\n
+2025-11-27  14:34:44.096 | info | s6orqkshg7dl65 |     checkpoint_files, sharded_metadata = get_checkpoint_shard_files(\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |     checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 4900, in from_pretrained\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |     return func(*args, **kwargs)\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 277, in _wrapper\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |     return model_class.from_pretrained(\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |   File "/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |     model = AutoModelForCausalLM.from_pretrained(\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |   File "/app/handler.py", line 118, in load_model\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |     load_model()\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 |   File "/app/handler.py", line 419, in <module>\n
+2025-11-27  14:34:44.095 | info | s6orqkshg7dl65 | Traceback (most recent call last):\n
+2025-11-27  14:34:42.876 | info | s6orqkshg7dl65 | \rFetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]\rFetching 2 files:   0%|          | 0/2 [00:11<?, ?it/s]\n
+2025-11-27  14:34:30.940 | info | s6orqkshg7dl65 | `torch_dtype` is deprecated! Use `dtype` instead!\n
+2025-11-27  14:34:30.940 | info | s6orqkshg7dl65 | Loading model maya-research/maya1 on cuda...\n
+2025-11-27  14:34:03.529 | error | 718et9thqdrbm4 | worker exited with exit code 1
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 | RuntimeError: Data processing error: CAS service error : IO Error: No space left on device (os error 28)\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |     download_files(\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 626, in xet_get\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |     xet_get(\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |     _download_to_tmp_and_move(\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |     return _hf_hub_download_to_cache_dir(\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:34:02.880 | info | 718et9thqdrbm4 |     return hf_hub_download(\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     result = self.fn(*self.args, **self.kwargs)\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     raise self._exception\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     return self.__get_result()\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 458, in result\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     return fut.result(timeout)\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     yield _result_or_cancel(fs.pop())\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     for obj in iterable:\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1181, in __iter__\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     thread_map(\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     snapshot_download(\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 494, in cached_files\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     raise e\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 567, in cached_files\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     cached_filenames = cached_files(\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = get_checkpoint_shard_files(\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files\n
+2025-11-27  14:34:02.879 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 4900, in from_pretrained\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |     return func(*args, **kwargs)\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 277, in _wrapper\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |     return model_class.from_pretrained(\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |     model = AutoModelForCausalLM.from_pretrained(\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 118, in load_model\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |     load_model()\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 419, in <module>\n
+2025-11-27  14:34:02.878 | info | 718et9thqdrbm4 | Traceback (most recent call last):\n
+2025-11-27  14:34:01.561 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:04<?, ?it/s]\n
+2025-11-27  14:34:01.561 | info | 718et9thqdrbm4 |   warnings.warn(\n
+2025-11-27  14:33:57.820 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py:798: UserWarning: Not enough free disk space to download the file. The expected file size is: 4991.16 MB. The target location /root/.cache/huggingface/hub/models--maya-research--maya1/blobs only has 2.36 MB free disk space.\n
+2025-11-27  14:33:57.047 | info | 718et9thqdrbm4 | `torch_dtype` is deprecated! Use `dtype` instead!\n
+2025-11-27  14:33:57.047 | info | 718et9thqdrbm4 | Loading model maya-research/maya1 on cuda...\n
+2025-11-27  14:33:38.859 | error | 718et9thqdrbm4 | worker exited with exit code 1
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 | RuntimeError: Data processing error: CAS service error : IO Error: No space left on device (os error 28)\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     download_files(\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 626, in xet_get\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     xet_get(\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     _download_to_tmp_and_move(\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     return _hf_hub_download_to_cache_dir(\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     return hf_hub_download(\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     result = self.fn(*self.args, **self.kwargs)\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     raise self._exception\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     return self.__get_result()\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 458, in result\n
+2025-11-27  14:33:37.072 | info | 718et9thqdrbm4 |     return fut.result(timeout)\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     yield _result_or_cancel(fs.pop())\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     for obj in iterable:\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1181, in __iter__\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     thread_map(\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     snapshot_download(\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 494, in cached_files\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     raise e\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 567, in cached_files\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     cached_filenames = cached_files(\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = get_checkpoint_shard_files(\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 4900, in from_pretrained\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     return func(*args, **kwargs)\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 277, in _wrapper\n
+2025-11-27  14:33:37.071 | info | 718et9thqdrbm4 |     return model_class.from_pretrained(\n
+2025-11-27  14:33:37.070 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained\n
+2025-11-27  14:33:37.070 | info | 718et9thqdrbm4 |     model = AutoModelForCausalLM.from_pretrained(\n
+2025-11-27  14:33:37.070 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 118, in load_model\n
+2025-11-27  14:33:37.070 | info | 718et9thqdrbm4 |     load_model()\n
+2025-11-27  14:33:37.070 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 419, in <module>\n
+2025-11-27  14:33:37.070 | info | 718et9thqdrbm4 | Traceback (most recent call last):\n
+2025-11-27  14:33:35.889 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:04<?, ?it/s]\n
+2025-11-27  14:33:35.889 | info | 718et9thqdrbm4 |   warnings.warn(\n
+2025-11-27  14:33:31.409 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py:798: UserWarning: Not enough free disk space to download the file. The expected file size is: 4991.16 MB. The target location /root/.cache/huggingface/hub/models--maya-research--maya1/blobs only has 2.75 MB free disk space.\n
+2025-11-27  14:33:30.841 | info | 718et9thqdrbm4 | `torch_dtype` is deprecated! Use `dtype` instead!\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | Loading model maya-research/maya1 on cuda...\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |   warnings.warn(message, FutureWarning)\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | /usr/local/lib/python3.10/dist-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.12) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | \n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |     https://gitlab.com/nvidia/container-images/cuda/blob/master/doc/support-policy.md\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | THIS IMAGE IS DEPRECATED and is scheduled for DELETION.\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | *************************\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | ** DEPRECATION NOTICE! **\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | *************************\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | \n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | \n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | By pulling and using the container, you accept the terms and conditions of this license:\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | This container image and its contents are governed by the NVIDIA Deep Learning Container License.\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | \n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | \n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | CUDA Version 12.1.0\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | \n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | ==========\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | == CUDA ==\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | ==========\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | \n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 | RuntimeError: Data processing error: CAS service error : IO Error: No space left on device (os error 28)\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |     download_files(\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 626, in xet_get\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |     xet_get(\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |     _download_to_tmp_and_move(\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |     return _hf_hub_download_to_cache_dir(\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download\n
+2025-11-27  14:33:19.289 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     return hf_hub_download(\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     result = self.fn(*self.args, **self.kwargs)\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     raise self._exception\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     return self.__get_result()\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 458, in result\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     return fut.result(timeout)\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     yield _result_or_cancel(fs.pop())\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     for obj in iterable:\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1181, in __iter__\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     thread_map(\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     snapshot_download(\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 494, in cached_files\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     raise e\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 567, in cached_files\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     cached_filenames = cached_files(\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = get_checkpoint_shard_files(\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(\n
+2025-11-27  14:33:19.288 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 4900, in from_pretrained\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 |     return func(*args, **kwargs)\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 277, in _wrapper\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 |     return model_class.from_pretrained(\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 |     model = AutoModelForCausalLM.from_pretrained(\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 118, in load_model\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 |     load_model()\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 419, in <module>\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 | Traceback (most recent call last):\n
+2025-11-27  14:33:19.287 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:04<?, ?it/s]\n
+2025-11-27  14:33:12.688 | error | 718et9thqdrbm4 | worker exited with exit code 1
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 | RuntimeError: Data processing error: CAS service error : IO Error: No space left on device (os error 28)\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |     download_files(\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 626, in xet_get\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |     xet_get(\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |     _download_to_tmp_and_move(\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |     return _hf_hub_download_to_cache_dir(\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |     return hf_hub_download(\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |     result = self.fn(*self.args, **self.kwargs)\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run\n
+2025-11-27  14:33:12.152 | info | 718et9thqdrbm4 |     raise self._exception\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     return self.__get_result()\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 458, in result\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     return fut.result(timeout)\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     yield _result_or_cancel(fs.pop())\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     for obj in iterable:\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1181, in __iter__\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     thread_map(\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     snapshot_download(\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 494, in cached_files\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     raise e\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 567, in cached_files\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     cached_filenames = cached_files(\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = get_checkpoint_shard_files(\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 4900, in from_pretrained\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |     return func(*args, **kwargs)\n
+2025-11-27  14:33:12.151 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 277, in _wrapper\n
+2025-11-27  14:33:12.150 | info | 718et9thqdrbm4 |     return model_class.from_pretrained(\n
+2025-11-27  14:33:12.150 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained\n
+2025-11-27  14:33:12.150 | info | 718et9thqdrbm4 |     model = AutoModelForCausalLM.from_pretrained(\n
+2025-11-27  14:33:12.150 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 118, in load_model\n
+2025-11-27  14:33:12.150 | info | 718et9thqdrbm4 |     load_model()\n
+2025-11-27  14:33:12.150 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 419, in <module>\n
+2025-11-27  14:33:12.150 | info | 718et9thqdrbm4 | Traceback (most recent call last):\n
+2025-11-27  14:33:10.892 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:04<?, ?it/s]\n
+2025-11-27  14:33:10.892 | info | 718et9thqdrbm4 |   warnings.warn(\n
+2025-11-27  14:33:06.915 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py:798: UserWarning: Not enough free disk space to download the file. The expected file size is: 4991.16 MB. The target location /root/.cache/huggingface/hub/models--maya-research--maya1/blobs only has 3.14 MB free disk space.\n
+2025-11-27  14:33:06.359 | info | 718et9thqdrbm4 | `torch_dtype` is deprecated! Use `dtype` instead!\n
+2025-11-27  14:33:06.358 | info | 718et9thqdrbm4 | Loading model maya-research/maya1 on cuda...\n
+2025-11-27  14:32:48.837 | error | 718et9thqdrbm4 | worker exited with exit code 1
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 | RuntimeError: Data processing error: CAS service error : IO Error: No space left on device (os error 28)\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     download_files(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 626, in xet_get\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     xet_get(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     _download_to_tmp_and_move(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return _hf_hub_download_to_cache_dir(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return hf_hub_download(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     result = self.fn(*self.args, **self.kwargs)\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     raise self._exception\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return self.__get_result()\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 458, in result\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return fut.result(timeout)\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     yield _result_or_cancel(fs.pop())\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     for obj in iterable:\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1181, in __iter__\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     thread_map(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     snapshot_download(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 494, in cached_files\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     raise e\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 567, in cached_files\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     cached_filenames = cached_files(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = get_checkpoint_shard_files(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 4900, in from_pretrained\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return func(*args, **kwargs)\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 277, in _wrapper\n
+2025-11-27  14:32:42.999 | info | 718et9thqdrbm4 |     return model_class.from_pretrained(\n
+2025-11-27  14:32:42.998 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained\n
+2025-11-27  14:32:42.998 | info | 718et9thqdrbm4 |     model = AutoModelForCausalLM.from_pretrained(\n
+2025-11-27  14:32:42.998 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 118, in load_model\n
+2025-11-27  14:32:42.998 | info | 718et9thqdrbm4 |     load_model()\n
+2025-11-27  14:32:42.998 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 419, in <module>\n
+2025-11-27  14:32:42.998 | info | 718et9thqdrbm4 | Traceback (most recent call last):\n
+2025-11-27  14:32:41.819 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:03<?, ?it/s]\n
+2025-11-27  14:32:41.819 | info | 718et9thqdrbm4 |   warnings.warn(\n
+2025-11-27  14:32:38.215 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py:798: UserWarning: Not enough free disk space to download the file. The expected file size is: 4991.16 MB. The target location /root/.cache/huggingface/hub/models--maya-research--maya1/blobs only has 3.53 MB free disk space.\n
+2025-11-27  14:32:37.664 | info | 718et9thqdrbm4 | `torch_dtype` is deprecated! Use `dtype` instead!\n
+2025-11-27  14:32:20.209 | error | 718et9thqdrbm4 | worker exited with exit code 1
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 | RuntimeError: Data processing error: CAS service error : IO Error: No space left on device (os error 28)\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     download_files(\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 626, in xet_get\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     xet_get(\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     _download_to_tmp_and_move(\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     return _hf_hub_download_to_cache_dir(\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     return hf_hub_download(\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     result = self.fn(*self.args, **self.kwargs)\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     raise self._exception\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     return self.__get_result()\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 458, in result\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     return fut.result(timeout)\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel\n
+2025-11-27  14:32:13.321 | info | 718et9thqdrbm4 |     yield _result_or_cancel(fs.pop())\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     for obj in iterable:\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1181, in __iter__\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     thread_map(\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     snapshot_download(\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 494, in cached_files\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     raise e\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 567, in cached_files\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     cached_filenames = cached_files(\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = get_checkpoint_shard_files(\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 4900, in from_pretrained\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     return func(*args, **kwargs)\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 277, in _wrapper\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     return model_class.from_pretrained(\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     model = AutoModelForCausalLM.from_pretrained(\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 118, in load_model\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |     load_model()\n
+2025-11-27  14:32:13.320 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 419, in <module>\n
+2025-11-27  14:32:13.319 | info | 718et9thqdrbm4 | Traceback (most recent call last):\n
+2025-11-27  14:32:12.157 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:04<?, ?it/s]\n
+2025-11-27  14:32:12.157 | info | 718et9thqdrbm4 |   warnings.warn(\n
+2025-11-27  14:32:08.448 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py:798: UserWarning: Not enough free disk space to download the file. The expected file size is: 4991.16 MB. The target location /root/.cache/huggingface/hub/models--maya-research--maya1/blobs only has 3.91 MB free disk space.\n
+2025-11-27  14:32:07.884 | info | 718et9thqdrbm4 | `torch_dtype` is deprecated! Use `dtype` instead!\n
+2025-11-27  14:31:50.333 | error | 718et9thqdrbm4 | worker exited with exit code 1
+2025-11-27  14:31:37.415 | info | 718et9thqdrbm4 | RuntimeError: Data processing error: CAS service error : IO Error: No space left on device (os error 28)\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     download_files(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 626, in xet_get\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     xet_get(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1720, in _download_to_tmp_and_move\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     _download_to_tmp_and_move(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1168, in _hf_hub_download_to_cache_dir\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     return _hf_hub_download_to_cache_dir(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1007, in hf_hub_download\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     return hf_hub_download(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     result = self.fn(*self.args, **self.kwargs)\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     raise self._exception\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     return self.__get_result()\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 458, in result\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     return fut.result(timeout)\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     yield _result_or_cancel(fs.pop())\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     for obj in iterable:\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1181, in __iter__\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     thread_map(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     return fn(*args, **kwargs)\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     snapshot_download(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 494, in cached_files\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     raise e\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 567, in cached_files\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     cached_filenames = cached_files(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/utils/hub.py", line 1084, in get_checkpoint_shard_files\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = get_checkpoint_shard_files(\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 1200, in _get_resolved_checkpoint_files\n
+2025-11-27  14:31:37.414 | info | 718et9thqdrbm4 |     checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 4900, in from_pretrained\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |     return func(*args, **kwargs)\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py", line 277, in _wrapper\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |     return model_class.from_pretrained(\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |   File "/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |     model = AutoModelForCausalLM.from_pretrained(\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 118, in load_model\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |     load_model()\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 |   File "/app/handler.py", line 419, in <module>\n
+2025-11-27  14:31:37.413 | info | 718et9thqdrbm4 | Traceback (most recent call last):\n
+2025-11-27  14:31:36.417 | info | 718et9thqdrbm4 | \rFetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]\rFetching 2 files:   0%|          | 0/2 [00:08<?, ?it/s]\n
+2025-11-27  14:31:27.561 | info | 718et9thqdrbm4 | `torch_dtype` is deprecated! Use `dtype` instead!\n
+2025-11-27  14:31:27.561 | info | 718et9thqdrbm4 | Loading model maya-research/maya1 on cuda...\n
