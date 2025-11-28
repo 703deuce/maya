@@ -285,13 +285,35 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
     # Build prompt
     prompt = build_prompt(voice_description, text)
     
-    # Debug: Verify text is in prompt
+    # Debug: Verify text is in prompt and check for emotion tags
     print(f"DEBUG: Input text received: {text[:100]}...")
     print(f"DEBUG: Text length: {len(text)} chars, {len(text.split())} words")
+    
+    # Check if emotion tags are present
+    emotion_tags = re.findall(r'<[a-z_]+>', text.lower())
+    if emotion_tags:
+        print(f"DEBUG: Found emotion tags in input: {set(emotion_tags)}")
+    else:
+        print(f"DEBUG: No emotion tags found in input text")
+    
     print(f"DEBUG: Prompt length: {len(prompt)} chars")
     
     # Tokenize input (match official example format)
+    # IMPORTANT: Don't use add_special_tokens=False - we want the tokenizer to handle tags properly
     inputs = tokenizer(prompt, return_tensors='pt')
+    
+    # Debug: Verify tags are preserved after tokenization
+    input_token_ids = inputs['input_ids'][0].tolist()
+    input_text_decoded = tokenizer.decode(input_token_ids, skip_special_tokens=False)
+    if emotion_tags:
+        print(f"DEBUG: Checking if emotion tags preserved after tokenization...")
+        for tag in emotion_tags:
+            if tag in input_text_decoded.lower():
+                print(f"✅ Tag '{tag}' preserved in tokenized text")
+            else:
+                print(f"⚠️ WARNING: Emotion tag '{tag}' may have been lost/modified during tokenization!")
+                print(f"   Original text snippet: {text[max(0, text.lower().find(tag)-20):text.lower().find(tag)+len(tag)+20]}")
+                print(f"   Decoded text snippet: {input_text_decoded.lower()[max(0, input_text_decoded.lower().find(tag)-20):input_text_decoded.lower().find(tag)+len(tag)+20] if tag in input_text_decoded.lower() else 'TAG NOT FOUND'}")
     # Get device from model (ensures consistency)
     device = next(model.parameters()).device
     input_ids = inputs['input_ids'].to(device)
@@ -313,8 +335,8 @@ def generate_audio(text: str, voice_description: str, temperature: float = 0.6, 
             max_new_tokens=max_new_tokens,
             min_new_tokens=28,  # At least 4 SNAC frames (7 tokens each)
             temperature=temperature,
-            top_p=0.9,  # Nucleus sampling
-            repetition_penalty=1.1,  # Prevent repetition loops
+            top_p=0.9,  # Nucleus sampling (conservative, consistent)
+            repetition_penalty=1.1,  # Prevent repetition loops (consistent quality)
             do_sample=True,
             eos_token_id=CODE_END_TOKEN_ID,  # Stop at end of speech token
             pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id else tokenizer.eos_token_id,
